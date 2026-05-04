@@ -26,21 +26,40 @@ vim.g.mapleader = " "
 ----------------------
 local map = vim.keymap.set
 
+-- básicos
 map("n", "<leader>w", "<cmd>w<cr>")
 map("n", "<leader>q", "<cmd>q<cr>")
 map("n", "<leader>x", "<cmd>qa<cr>")
-
-map("n", "<leader>n", "<cmd>bnext<cr>")
-map("n", "<leader>p", "<cmd>bprevious<cr>")
-map("n", "<leader>d", "<cmd>bdelete<cr>")
-
 map("n", "<leader>o", "<cmd>wq<cr>")
 
+-- buffers (tu estilo)
+map("n", "<leader>v", "<cmd>bnext<cr>")
+map("n", "<leader>m", "<cmd>bprevious<cr>")
+map("n", "<leader>d", "<cmd>bdelete<cr>")
+
+-- guardar rápido
+map("n", "<leader>vv", "<cmd>w<cr>")
+
+-- abrir archivo escribiendo ruta
+map("n", "<leader>e", ":e ")
+
+-- diagnósticos
+map("n", "<leader>l", vim.diagnostic.open_float)
+
+-- LSP navegación
 map("n", "gd", vim.lsp.buf.definition)
 map("n", "K", vim.lsp.buf.hover)
 map("n", "gr", vim.lsp.buf.references)
 
-map("n", "<leader>e", vim.diagnostic.open_float)
+-- explorador
+map("n", "<C-n>", "<cmd>Ex<cr>")
+
+-- terminal
+map("n", "<C-t>", function()
+  vim.cmd("split | terminal")
+end)
+
+map("t", "<Esc>", [[<C-\><C-n>]])
 
 ----------------------
 -- 📦 LAZY.NVIM
@@ -110,7 +129,6 @@ cmp.setup({
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- PYTHON
 lspconfig.pyright.setup({
   capabilities = capabilities,
   settings = {
@@ -123,7 +141,6 @@ lspconfig.pyright.setup({
   },
 })
 
--- BASH
 lspconfig.bashls.setup({
   capabilities = capabilities,
 })
@@ -142,7 +159,7 @@ vim.diagnostic.config({
 })
 
 ----------------------
--- 💾 FORMATEO LIMPIO (SIN WARNING)
+-- 💾 FORMATEO
 ----------------------
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.py",
