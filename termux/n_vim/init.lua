@@ -2,6 +2,9 @@
 -- NVIM CONFIG PERSONAL (PYTHON + BASH - TERMUX)
 -- =====================================================
 
+vim.g.lsp_log_level = "off"
+vim.notify = function() end
+
 ----------------------
 -- ⚙️ OPCIONES BÁSICAS
 ----------------------
