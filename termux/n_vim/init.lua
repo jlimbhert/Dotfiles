@@ -1,10 +1,10 @@
 -- =====================================================
--- NVIM PYTHON – CONFIG MEJORADA (TERMUX)
+-- NVIM CONFIG PERSONAL (PYTHON + BASH - TERMUX)
 -- =====================================================
 
--- ======================
--- OPCIONES BÁSICAS
--- ======================
+----------------------
+-- ⚙️ OPCIONES BÁSICAS
+----------------------
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.expandtab = true
@@ -18,27 +18,37 @@ vim.opt.mouse = "a"
 
 vim.g.mapleader = " "
 
--- ======================
--- ATAJOS
--- ======================
-vim.keymap.set('n', '<leader>w', ':w<CR>')
-vim.keymap.set('n', '<leader>q', ':q<CR>')
-vim.keymap.set('n', '<leader>o', ':wq<CR>')
+----------------------
+-- ⌨️ KEYMAPS OPTIMIZADOS
+----------------------
+local map = vim.keymap.set
 
-vim.keymap.set('n', '<leader>n', ':bn<CR>')
-vim.keymap.set('n', '<leader>p', ':bp<CR>')
-vim.keymap.set('n', '<leader>d', ':bd<CR>')
-vim.keymap.set('n', '<leader>x', ':qa<CR>')
+-- básicos
+map("n", "<leader>w", "<cmd>w<cr>")
+map("n", "<leader>q", "<cmd>q<cr>")
+map("n", "<leader>x", "<cmd>qa<cr>")
 
--- Navegación LSP
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
-vim.keymap.set('n', 'K', vim.lsp.buf.hover)
-vim.keymap.set('n', 'gr', vim.lsp.buf.references)
+-- navegación buffers
+map("n", "<leader>n", "<cmd>bnext<cr>")
+map("n", "<leader>p", "<cmd>bprevious<cr>")
+map("n", "<leader>d", "<cmd>bdelete<cr>")
 
--- ======================
--- LAZY.NVIM
--- ======================
+-- guardar + salir rápido
+map("n", "<leader>o", "<cmd>wq<cr>")
+
+-- LSP navegación
+map("n", "gd", vim.lsp.buf.definition)
+map("n", "K", vim.lsp.buf.hover)
+map("n", "gr", vim.lsp.buf.references)
+
+-- diagnóstico rápido
+map("n", "<leader>e", vim.diagnostic.open_float)
+
+----------------------
+-- 📦 LAZY.NVIM
+----------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     "git", "clone", "--filter=blob:none",
@@ -46,60 +56,35 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath
   })
 end
+
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-
+  -- LSP
   "neovim/nvim-lspconfig",
 
+  -- AUTOCOMPLETADO
+  "hrsh7th/nvim-cmp",
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-path",
+  "L3MON4D3/LuaSnip",
+  "saadparwaiz1/cmp_luasnip",
+
+  -- AUTOPAIR
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     config = true,
   },
 
+  -- PYTHON SYNTAX
   "vim-python/python-syntax",
-
-  "hrsh7th/nvim-cmp",
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-buffer",
-  "hrsh7th/cmp-path",
-
-  "L3MON4D3/LuaSnip",
-  "saadparwaiz1/cmp_luasnip",
 })
 
--- ======================
--- 🎨 TEMA PERSONALIZADO
--- ======================
-vim.cmd("colorscheme evening")
-
-vim.api.nvim_set_hl(0, "Normal", { bg = "#1e1e1e", fg = "#ffffff" })
-
-vim.api.nvim_set_hl(0, "CursorLine", { bg = "#2a2a2a" })
-vim.api.nvim_set_hl(0, "CursorColumn", { bg = "#2a2a2a" })
-vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ffd75f", bold = true })
-
-vim.api.nvim_set_hl(0, "Comment", { fg = "#888888", italic = true })
-vim.api.nvim_set_hl(0, "String", { fg = "#ffd75f" })
-vim.api.nvim_set_hl(0, "Keyword", { fg = "#ff5f5f", bold = true })
-vim.api.nvim_set_hl(0, "Function", { fg = "#ffffff", bold = true })
-vim.api.nvim_set_hl(0, "Identifier", { fg = "#ffffff" })
-
-vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#ff0000" })
-vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#ffaa00" })
-
--- ======================
--- PYTHON SYNTAX
--- ======================
-vim.g.python_highlight_all = 1
-vim.g.python_highlight_string_formatting = 1
-vim.g.python_highlight_string_format = 1
-vim.g.python_highlight_string_templates = 1
-
--- ======================
--- AUTOCOMPLETADO (CMP)
--- ======================
+----------------------
+-- 🧠 AUTOCOMPLETADO
+----------------------
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 
@@ -109,12 +94,14 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
+
   mapping = cmp.mapping.preset.insert({
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<Tab>"] = cmp.mapping.select_next_item(),
     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
   }),
+
   sources = {
     { name = "nvim_lsp" },
     { name = "luasnip" },
@@ -123,10 +110,16 @@ cmp.setup({
   },
 })
 
--- ======================
--- LSP PYRIGHT
--- ======================
-vim.lsp.config("pyright", {
+----------------------
+-- 🐍 LSP PYTHON + 🐚 BASH
+----------------------
+local lspconfig = require("lspconfig")
+
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+-- PYTHON
+lspconfig.pyright.setup({
+  capabilities = capabilities,
   settings = {
     python = {
       analysis = {
@@ -137,36 +130,54 @@ vim.lsp.config("pyright", {
   },
 })
 
-vim.lsp.enable("pyright")
+-- BASH
+lspconfig.bashls.setup({
+  capabilities = capabilities,
+})
 
--- ======================
--- DIAGNÓSTICOS
--- ======================
+----------------------
+-- ⚠️ DIAGNÓSTICOS (TIEMPO REAL)
+----------------------
 vim.diagnostic.config({
   virtual_text = {
-    spacing = 2,
     prefix = "●",
+    spacing = 2,
   },
   underline = true,
   update_in_insert = true,
   severity_sort = true,
 })
 
--- ======================
--- 🧠 FORMATEO REAL CON BLACK
--- ======================
-
--- Formatear manual con recarga automática
-vim.keymap.set('n', '<leader>f', function()
-  vim.cmd("!black %")
-  vim.cmd("edit")
-end)
-
--- Formatear automáticamente al guardar (solo Python)
+----------------------
+-- 💾 FORMATEO (BLACK)
+----------------------
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.py",
   callback = function()
-    vim.cmd("silent! !black %")
-    vim.cmd("edit")
+    vim.cmd("silent !black %")
   end,
 })
+
+----------------------
+-- 🎨 TEMA BASE + PERSONALIZACIÓN
+----------------------
+vim.cmd("colorscheme default")
+
+-- base oscura
+vim.api.nvim_set_hl(0, "Normal", { bg = "#1c1c1c", fg = "#e5e5e5" })
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#2a2a2a" })
+vim.api.nvim_set_hl(0, "CursorColumn", { bg = "#2a2a2a" })
+vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ffd75f", bold = true })
+
+-- colores controlados
+vim.api.nvim_set_hl(0, "Comment", { fg = "#8a8a8a", italic = true })
+vim.api.nvim_set_hl(0, "String", { fg = "#ffd75f" })
+vim.api.nvim_set_hl(0, "Function", { fg = "#ffffff", bold = true })
+vim.api.nvim_set_hl(0, "Keyword", { fg = "#ff5f5f", bold = true })
+
+-- errores / warnings
+vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#ff4d4d" })
+vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#ffb84d" })
+
+-- bloquear morado (evitar sorpresas de plugins)
+vim.api.nvim_set_hl(0, "Statement", { fg = "#ff5f5f" })
