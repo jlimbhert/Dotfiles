@@ -1,5 +1,5 @@
 -- =====================================================
--- NVIM CONFIG PERSONAL (PYTHON + BASH + HTML/CSS - TERMUX)
+-- NVIM CONFIG PERSONAL (PYTHON + BASH - TERMUX)
 -- =====================================================
 
 vim.g.lsp_log_level = "off"
@@ -93,8 +93,6 @@ require("lazy").setup({
   },
 
   "vim-python/python-syntax",
-  "tpope/vim-surround",
-  "mattn/emmet-vim" -- ✅ Corregido, ya no da error
 })
 
 ----------------------
@@ -125,17 +123,12 @@ cmp.setup({
   },
 })
 
--- ➕ Configuración de Emmet
-vim.g.user_emmet_leader_key = '<C-e>'
-vim.g.user_emmet_install_global = 1
-
 ----------------------
--- 🐍 LSP PYTHON + 🐚 BASH + 🌐 HTML/CSS
+-- 🐍 LSP PYTHON + 🐚 BASH
 ----------------------
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- Python
 lspconfig.pyright.setup({
   capabilities = capabilities,
   settings = {
@@ -148,21 +141,8 @@ lspconfig.pyright.setup({
   },
 })
 
--- Bash
 lspconfig.bashls.setup({
   capabilities = capabilities,
-})
-
--- HTML
-lspconfig.html.setup({
-  capabilities = capabilities,
-  filetypes = { "html", "htmldjango" },
-})
-
--- CSS
-lspconfig.cssls.setup({
-  capabilities = capabilities,
-  filetypes = { "css", "scss", "less" },
 })
 
 ----------------------
