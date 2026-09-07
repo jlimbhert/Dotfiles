@@ -1,5 +1,5 @@
 -- =====================================================
--- NVIM CONFIG PERSONAL (PYTHON + BASH + HTML/CSS - TERMUX)
+-- NVIM CONFIG PERSONAL (PYTHON + BASH + HTML/CSS/JS - TERMUX)
 -- =====================================================
 
 vim.g.lsp_log_level = "off"
@@ -22,7 +22,7 @@ vim.opt.mouse = "a"
 vim.g.mapleader = " "
 
 ----------------------
--- ⌨️ KEYMAPS OPTIMIZADOS
+-- ⌨️ KEYMAPS
 ----------------------
 local map = vim.keymap.set
 
@@ -32,7 +32,7 @@ map("n", "<leader>q", "<cmd>q<cr>")
 map("n", "<leader>x", "<cmd>qa<cr>")
 map("n", "<leader>o", "<cmd>wq<cr>")
 
--- buffers (tu estilo)
+-- buffers
 map("n", "<leader>v", "<cmd>bnext<cr>")
 map("n", "<leader>m", "<cmd>bprevious<cr>")
 map("n", "<leader>d", "<cmd>bdelete<cr>")
@@ -40,7 +40,7 @@ map("n", "<leader>d", "<cmd>bdelete<cr>")
 -- guardar rápido
 map("n", "<leader>vv", "<cmd>w<cr>")
 
--- abrir archivo escribiendo ruta
+-- abrir archivo
 map("n", "<leader>e", ":e ")
 
 -- diagnósticos
@@ -77,8 +77,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+  -- LSP
   "neovim/nvim-lspconfig",
 
+  -- Autocompletado
   "hrsh7th/nvim-cmp",
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-buffer",
@@ -86,16 +88,26 @@ require("lazy").setup({
   "L3MON4D3/LuaSnip",
   "saadparwaiz1/cmp_luasnip",
 
+  -- Autopairs
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     config = true,
   },
 
+  -- Sintaxis y utilidades
   "vim-python/python-syntax",
   "tpope/vim-surround",
-  "mattn/emmet-vim" -- ✅ Corregido, ya no da error
+  "mattn/emmet-vim",
+
+  -- Tema
+  "morhetz/gruvbox",
 })
+
+----------------------
+-- 🎨 TEMA GRUVBOX
+----------------------
+vim.cmd("colorscheme gruvbox")
 
 ----------------------
 -- 🧠 AUTOCOMPLETADO
@@ -125,12 +137,12 @@ cmp.setup({
   },
 })
 
--- ➕ Configuración de Emmet
+-- Emmet
 vim.g.user_emmet_leader_key = '<C-e>'
 vim.g.user_emmet_install_global = 1
 
 ----------------------
--- 🐍 LSP PYTHON + 🐚 BASH + 🌐 HTML/CSS
+-- 🐍 LSP CONFIG
 ----------------------
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -179,116 +191,11 @@ vim.diagnostic.config({
 })
 
 ----------------------
--- 💾 FORMATEO
+-- 💾 FORMATEO AUTOMÁTICO (Python)
 ----------------------
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.py",
   callback = function()
     vim.lsp.buf.format({ async = false })
   end,
-})
-
-----------------------
--- 🎨 TEMA (MID-TONE GRUVBOX STYLE)
-----------------------
-vim.cmd("colorscheme default")
-
--- Fondo base: marrón-gris cálido (más usable de día)
-vim.api.nvim_set_hl(0, "Normal", {
-    bg = "#3c3836",
-    fg = "#ebdbb2"
-})
-
--- Línea/columna del cursor (gris visible)
-vim.api.nvim_set_hl(0, "CursorLine", {
-    bg = "#504945"
-})
-
-vim.api.nvim_set_hl(0, "CursorColumn", {
-    bg = "#504945"
-})
-
-vim.api.nvim_set_hl(0, "CursorLineNr", {
-    fg = "#fabd2f",
-    bold = true
-})
-
--- Comentarios (más visibles que antes)
-vim.api.nvim_set_hl(0, "Comment", {
-    fg = "#a89984",
-    italic = true
-})
-
--- Keywords / statements (rojo gruvbox)
-vim.api.nvim_set_hl(0, "Keyword", {
-    fg = "#fb4934",
-    bold = true
-})
-
-vim.api.nvim_set_hl(0, "Statement", {
-    fg = "#fb4934",
-    bold = true
-})
-
-vim.api.nvim_set_hl(0, "PreProc", {
-    fg = "#fe8019"
-})
-
--- Imports / módulos / tipos (azul)
-vim.api.nvim_set_hl(0, "Include", {
-    fg = "#83a598"
-})
-
-vim.api.nvim_set_hl(0, "Type", {
-    fg = "#83a598"
-})
-
-vim.api.nvim_set_hl(0, "Structure", {
-    fg = "#83a598"
-})
-
--- Strings y números (amarillo cálido)
-vim.api.nvim_set_hl(0, "String", {
-    fg = "#fabd2f"
-})
-
-vim.api.nvim_set_hl(0, "Number", {
-    fg = "#d79921"
-})
-
--- Funciones / identificadores
-vim.api.nvim_set_hl(0, "Function", {
-    fg = "#ebdbb2",
-    bold = true
-})
-
-vim.api.nvim_set_hl(0, "Identifier", {
-    fg = "#d5c4a1"
-})
-
--- Constantes
-vim.api.nvim_set_hl(0, "Constant", {
-    fg = "#fe8019"
-})
-
--- Diagnósticos
-vim.api.nvim_set_hl(0, "DiagnosticError", {
-    fg = "#fb4934"
-})
-
-vim.api.nvim_set_hl(0, "DiagnosticWarn", {
-    fg = "#fe8019"
-})
-
-vim.api.nvim_set_hl(0, "DiagnosticInfo", {
-    fg = "#83a598"
-})
-
--- Python imports
-vim.api.nvim_set_hl(0, "pythonImport", {
-    fg = "#83a598"
-})
-
-vim.api.nvim_set_hl(0, "pythonInclude", {
-    fg = "#fb4934"
 })
