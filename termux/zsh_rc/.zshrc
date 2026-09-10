@@ -79,6 +79,7 @@ alias mkev="python -m venv venv"
 alias ev+="source venv/bin/activate"
 alias ev-="deactivate"
 
+alias jcpc='termux-clipboard-set'
 # --------------------------------------------------
 # FUNCIONES
 # --------------------------------------------------
