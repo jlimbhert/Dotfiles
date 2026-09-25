@@ -13,7 +13,8 @@ export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 # --------------------------------------------------
 # COMPLETIONS
 # --------------------------------------------------
-fpath+=(~/JLstack/plugins/zsh/zsh-completions/src)
+DIR_PLUGINS_ZSH="$HOME/.jbootstrap/plugins/zsh"
+fpath+=("$DIR_PLUGINS_ZSH"/zsh-completions/src)
 
 autoload -Uz compinit
 compinit -u
@@ -45,14 +46,14 @@ setopt autocd
 # --------------------------------------------------
 # PLUGINS
 # --------------------------------------------------
-[[ -f ~/JLstack/plugins/zsh/powerlevel10k/powerlevel10k.zsh-theme ]] && \
-  source ~/JLstack/plugins/zsh/powerlevel10k/powerlevel10k.zsh-theme
+[[ -f "$DIR_PLUGINS_ZSH"/powerlevel10k/powerlevel10k.zsh-theme ]] && \
+  source "$DIR_PLUGINS_ZSH"/powerlevel10k/powerlevel10k.zsh-theme
 
-[[ -f ~/JLstack/plugins/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
-  source ~/JLstack/plugins/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+[[ -f "$DIR_PLUGINS_ZSH"/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+  source "$DIR_PLUGINS_ZSH"/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-[[ -f ~/JLstack/plugins/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
-  source ~/JLstack/plugins/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[[ -f "$DIR_PLUGINS_ZSH"/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+  source "$DIR_PLUGINS_ZSH"/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # --------------------------------------------------
 # P10K CONFIG
@@ -68,12 +69,12 @@ alias la="lsd -la --group-dirs=first --icon=always"
 
 alias up="pkg update && pkg upgrade -y"
 
-alias jl="cd $HOME/JLimbhert"
-alias jla="cd $HOME/storage/shared/JL-droid"
+alias jl="cd $HOME/jlimbhert"
+alias jla="cd $HOME/storage/shared/jlimbhert"
 
 alias servi='browser-sync start --server --files "*.html, *.css"'
 
-alias lab_sync="python3 ~/JLimbhert/Herramientas/lab_sync/lab_sync.py"
+alias lab_sync="python3 ~/jlimbhert/tools/lab_sync/lab_sync_V1.py"
 
 alias mkev="python -m venv venv"
 alias ev+="source venv/bin/activate"
@@ -83,4 +84,4 @@ alias jcpc='termux-clipboard-set'
 # --------------------------------------------------
 # FUNCIONES
 # --------------------------------------------------
-source ~/JLstack/zsh/configs_zshrc/functions.zsh
+source "$HOME"/jlimbhert/dotfiles/termux/zsh_rc/functions.zsh
