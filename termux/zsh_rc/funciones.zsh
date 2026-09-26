@@ -2,10 +2,14 @@
 # Función para copiar contenido de los aechivos
 jcp() {
     if [[ -e "$1" ]]; then
-        if cat "$1" | termux-clipboard-set; then
-            echo -e "Archivo copiado correctamente."
+        if [[ -r "$1" ]]; then
+            if cat "$1" | termux-clipboard-set; then
+                echo -e "Archivo copiado correctamente."
+            else
+                echo -e "Error al copiar el archivo '$1'. vuelva a intentarlo."
+            fi
         else
-            echo -e "Error al copiar el archivo '$1'. vuelva a intentarlo."
+            echo -e "El archivo no tiene permisos de lectura."
         fi
     else
         echo -e "El archivo '$1' no existe."
