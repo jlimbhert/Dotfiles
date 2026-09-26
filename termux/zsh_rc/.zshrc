@@ -11,9 +11,14 @@ fi
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 # --------------------------------------------------
+# SOURCE DE ARCHIVOS COMPLEMENTARIOS
+# --------------------------------------------------
+source "$HOME/jlimbhert/dotfiles/termux/zsh_rc/config.zsh"
+source "$DIR_ZSH/funciones.zsh"
+
+# --------------------------------------------------
 # COMPLETIONS
 # --------------------------------------------------
-DIR_PLUGINS_ZSH="$HOME/.jbootstrap/plugins/zsh"
 fpath+=("$DIR_PLUGINS_ZSH"/zsh-completions/src)
 
 autoload -Uz compinit
@@ -84,4 +89,4 @@ alias jcpc='termux-clipboard-set'
 # --------------------------------------------------
 # FUNCIONES
 # --------------------------------------------------
-source "$HOME"/jlimbhert/dotfiles/termux/zsh_rc/functions.zsh
+source "$HOME"/jlimbhert/dotfiles/termux/zsh_rc/funciones.zsh
